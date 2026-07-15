@@ -50,16 +50,16 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Tasks
         }
 
         /// <inheritdoc/>
-        public string Name => "JFToTubeArchivistPlaylistsSyncTask";
+        public string Name => "JFToTubeArchivistPlaylistsSyncTaskHatsuka";
 
         /// <inheritdoc/>
         public string Description => "This tasks syncs Jellyfin playlists to TubeArchivist";
 
         /// <inheritdoc/>
-        public string Category => "TubeArchivistMetadata";
+        public string Category => Constants.TaskCategory;
 
         /// <inheritdoc/>
-        public string Key => "JFToTubeArchivistPlaylistsSyncTask";
+        public string Key => "JFToTubeArchivistPlaylistsSyncTaskHatsuka";
 
         private Dictionary<Guid, List<BaseItem>> GetAllVideos(IEnumerable<MediaBrowser.Controller.Playlists.Playlist> playlists, User user)
         {

@@ -1,5 +1,15 @@
 <h1 align="center">Jellyfin TubeArchivist Plugin</h1>
 
+> This fork uses an independent plugin GUID, assembly name, provider name, and
+> scheduled-task keys, so it can be installed alongside the official plugin.
+> Its Jellyfin provider name is `TubeArchivist Hatsuka`.
+
+Custom Jellyfin repository URL:
+
+```text
+https://raw.githubusercontent.com/OchimizuHatsuka/tubearchivist-jf-plugin/master/manifest.json
+```
+
 <p align="center">
 <img alt="Plugin Banner" src="https://raw.githubusercontent.com/tubearchivist/tubearchivist-jf-plugin/master/images/logo.png"/>
 <br/>
