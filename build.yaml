@@ -1,17 +1,17 @@
 ---
-name: "TubeArchivistMetadata"
-guid: "dc97d0c6-28b0-4242-afb4-5833ae1b3715"
-imageUrl: https://raw.githubusercontent.com/tubearchivist/tubearchivist-jf-plugin/master/images/logo.png
-version: "1.4.4.0"
+name: "TubeArchivistMetadataHatsuka"
+guid: "bb3ee16a-1dbb-4997-b8d6-5f3e99dedb59"
+imageUrl: https://raw.githubusercontent.com/OchimizuHatsuka/tubearchivist-jf-plugin/master/images/logo.png
+version: "1.4.4.1"
 targetAbi: "10.11.0.0"
 framework: "net9.0"
-overview: "Metadata for your TubeArchivist library on Jellyfin"
+overview: "Independent TubeArchivist metadata provider with channel avatars"
 description: >
-  TubeArchivistMetadata is a plugin that automatically manages
-  metadata for videos downloaded with TubeArchivist from YouTube.
+  TubeArchivistMetadataHatsuka is an independently identified plugin that
+  manages metadata for videos downloaded with TubeArchivist from YouTube.
 category: "Metadata"
-owner: "DarkFighterLuke"
+owner: "OchimizuHatsuka"
 artifacts:
-- "Jellyfin.Plugin.TubeArchivistMetadata.dll"
+- "Jellyfin.Plugin.TubeArchivistMetadata.Hatsuka.dll"
 changelog: >
-  Handle TubeArchivist playlists pagination
+  Add channel avatars for uploader people and isolate plugin identity from the official provider

@@ -44,7 +44,7 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Providers
         /// <summary>
         /// Gets the provider name.
         /// </summary>
-        public string Name => "TubeArchivist";
+        public string Name => Constants.ProviderName;
 
         /// <inheritdoc />
         public bool Supports(BaseItem item) => item is Episode;

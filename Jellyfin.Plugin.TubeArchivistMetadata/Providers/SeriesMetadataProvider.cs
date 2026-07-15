@@ -43,7 +43,7 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Providers
         /// <summary>
         /// Gets the provider name.
         /// </summary>
-        public string Name => "TubeArchivist";
+        public string Name => Constants.ProviderName;
 
         /// <inheritdoc />
         public async Task<MetadataResult<Series>> GetMetadata(SeriesInfo info, CancellationToken cancellationToken)

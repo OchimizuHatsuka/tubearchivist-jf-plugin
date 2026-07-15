@@ -8,16 +8,21 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
         /// <summary>
         /// Plugin name.
         /// </summary>
-        public const string PluginName = "TubeArchivist Metadata";
+        public const string PluginName = "TubeArchivist Metadata Hatsuka";
 
         /// <summary>
         /// Plugin GUID.
         /// </summary>
-        public const string PluginGuid = "dc97d0c6-28b0-4242-afb4-5833ae1b3715";
+        public const string PluginGuid = "bb3ee16a-1dbb-4997-b8d6-5f3e99dedb59";
 
         /// <summary>
         /// Providers name.
         /// </summary>
-        public const string ProviderName = "TubeArchivist";
+        public const string ProviderName = "TubeArchivist Hatsuka";
+
+        /// <summary>
+        /// Scheduled tasks category.
+        /// </summary>
+        public const string TaskCategory = "TubeArchivistMetadataHatsuka";
     }
 }

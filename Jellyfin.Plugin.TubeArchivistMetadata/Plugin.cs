@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Data.Enums;
 using Jellyfin.Plugin.TubeArchivistMetadata.Configuration;
@@ -30,6 +32,7 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
     {
         private readonly IUserManager _userManager;
         private readonly IUserDataManager _userDataManager;
+        private readonly string _personImageCachePath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plugin"/> class.
@@ -60,6 +63,7 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
             handler.CheckCertificateRevocationList = true;
             HttpClient = new HttpClient(handler);
             UpdateAuthorizationHeader(Configuration.TubeArchivistApiKey);
+            _personImageCachePath = Path.Combine(applicationPaths.DataPath, "tubearchivist-hatsuka", "person-images");
 
             SessionManager = sessionManager;
             sessionManager.PlaybackProgress += OnPlaybackProgress;
@@ -103,6 +107,64 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata
         /// Gets the LibraryManager used globally by the plugin.
         /// </summary>
         public ILibraryManager LibraryManager { get; }
+
+        /// <summary>
+        /// Downloads a TubeArchivist channel image to a local path Jellyfin can use
+        /// for a person. Jellyfin does not use the metadata provider to retrieve
+        /// images attached to <see cref="PersonInfo"/> objects.
+        /// </summary>
+        /// <param name="channelId">YouTube channel id.</param>
+        /// <param name="imageUrl">TubeArchivist channel image URL.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The local image path, or <see langword="null"/> when unavailable.</returns>
+        public async Task<string?> GetPersonImagePathAsync(string channelId, string imageUrl, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(channelId) || string.IsNullOrWhiteSpace(imageUrl))
+            {
+                return null;
+            }
+
+            Directory.CreateDirectory(_personImageCachePath);
+            var imagePath = Path.Combine(_personImageCachePath, channelId + ".jpg");
+            if (File.Exists(imagePath))
+            {
+                return imagePath;
+            }
+
+            try
+            {
+                var hasHttpScheme = Uri.TryCreate(imageUrl, UriKind.Absolute, out var absoluteUri)
+                    && (absoluteUri.Scheme == Uri.UriSchemeHttp || absoluteUri.Scheme == Uri.UriSchemeHttps);
+                var uri = hasHttpScheme
+                    ? absoluteUri
+                    : new Uri(Utils.SanitizeUrl(Configuration.TubeArchivistUrl + imageUrl).TrimEnd('/'));
+                Logger.LogDebug("Caching person image for channel {ChannelId} from {ImageUrl}", channelId, uri);
+                using var response = await HttpClient.GetAsync(uri, cancellationToken).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
+
+                var temporaryPath = imagePath + "." + Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture) + ".tmp";
+                using (var output = new FileStream(temporaryPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                {
+                    await response.Content.CopyToAsync(output, cancellationToken).ConfigureAwait(false);
+                }
+
+                try
+                {
+                    File.Move(temporaryPath, imagePath);
+                }
+                catch (IOException) when (File.Exists(imagePath))
+                {
+                    File.Delete(temporaryPath);
+                }
+
+                return imagePath;
+            }
+            catch (Exception ex) when (ex is HttpRequestException or IOException or UnauthorizedAccessException)
+            {
+                Logger.LogWarning(ex, "Failed to cache channel image for person {ChannelId}", channelId);
+                return null;
+            }
+        }
 
         /// <inheritdoc />
         public IEnumerable<PluginPageInfo> GetPages() => new[]

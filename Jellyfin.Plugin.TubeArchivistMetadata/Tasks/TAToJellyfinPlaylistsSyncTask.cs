@@ -44,16 +44,16 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Tasks
         }
 
         /// <inheritdoc/>
-        public string Name => "TAToJellyfinPlaylistsSyncTask";
+        public string Name => "TAToJellyfinPlaylistsSyncTaskHatsuka";
 
         /// <inheritdoc/>
         public string Description => "This tasks syncs TubeArchivist playlists to Jellyfin";
 
         /// <inheritdoc/>
-        public string Category => "TubeArchivistMetadata";
+        public string Category => Constants.TaskCategory;
 
         /// <inheritdoc/>
-        public string Key => "TAToJellyfinPlaylistsSyncTask";
+        public string Key => "TAToJellyfinPlaylistsSyncTaskHatsuka";
 
         private int CountTotalVideos(ISet<TubeArchivist.Playlist> taPlaylists)
         {

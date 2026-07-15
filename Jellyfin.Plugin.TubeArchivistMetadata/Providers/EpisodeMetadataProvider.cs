@@ -44,7 +44,7 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Providers
         /// <summary>
         /// Gets the provider name.
         /// </summary>
-        public string Name => "TubeArchivist";
+        public string Name => Constants.ProviderName;
 
         /// <inheritdoc />
         public async Task<MetadataResult<Episode>> GetMetadata(EpisodeInfo info, CancellationToken cancellationToken)
@@ -58,11 +58,22 @@ namespace Jellyfin.Plugin.TubeArchivistMetadata.Providers
 
             if (video != null)
             {
+                var channel = await taApi.GetChannel(video.Channel.Id).ConfigureAwait(false);
+                var channelThumbUrl = channel?.ThumbUrl ?? video.Channel.ThumbUrl;
+                var personImagePath = await Plugin.Instance!.GetPersonImagePathAsync(
+                    video.Channel.Id,
+                    channelThumbUrl,
+                    cancellationToken).ConfigureAwait(false);
+                _logger.LogDebug(
+                    "Person image for channel {ChannelId}: source {ImageUrl}, local path {ImagePath}",
+                    video.Channel.Id,
+                    channelThumbUrl,
+                    personImagePath);
                 var peopleInfo = new List<PersonInfo>();
                 PeopleHelper.AddPerson(peopleInfo, new PersonInfo
                 {
                     Name = video.Channel.Name,
-                    ImageUrl = video.Channel.ThumbUrl,
+                    ImageUrl = personImagePath,
                     Type = Data.Enums.PersonKind.Actor,
                 });
                 result.HasMetadata = true;
