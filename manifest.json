@@ -3,10 +3,19 @@
         "category": "Metadata",
         "guid": "bb3ee16a-1dbb-4997-b8d6-5f3e99dedb59",
         "name": "TubeArchivistMetadataHatsuka",
-        "description": "An independently identified TubeArchivist metadata plugin with channel avatars for uploader people.\n",
+        "description": "TubeArchivistMetadataHatsuka is an independently identified plugin that manages metadata for videos downloaded with TubeArchivist from YouTube.\n",
         "owner": "OchimizuHatsuka",
         "overview": "Independent TubeArchivist metadata provider with channel avatars",
         "imageUrl": "https://raw.githubusercontent.com/OchimizuHatsuka/tubearchivist-jf-plugin/master/images/logo.png",
-        "versions": []
+        "versions": [
+            {
+                "version": "1.4.4.1",
+                "changelog": "Add channel avatars for uploader people and isolate plugin identity from the official provider\n",
+                "targetAbi": "10.11.0.0",
+                "sourceUrl": "https://github.com/OchimizuHatsuka/tubearchivist-jf-plugin/releases/download/v1.4.4.1/tubearchivistmetadatahatsuka_1.4.4.1.zip",
+                "checksum": "bdf34ef5a31284b53ef28b28a1f12677",
+                "timestamp": "2026-07-15T03:41:34Z"
+            }
+        ]
     }
 ]
